@@ -1,3 +1,7 @@
+@Library('sys-lib')
+
+
+
 pipeline{
     agent {
        label 'jenkins-agent-01'
@@ -15,12 +19,18 @@ pipeline{
     stages{
         stage("Build java app") {
             steps{
-                sh "mvn package install -DskipTests"
+                script {
+                    def r7 = new edu.iti.mavenClass()
+                    r7.Build("package install -DskipTests")
+                }
             }
         }
         stage("Test java app") {
             steps{
-                sh "mvn test"
+                script {
+                    def r7 = new edu.iti.mavenClass()
+                    r7.test()
+                }
             }
         }
         stage("Archive java app") {
@@ -30,12 +40,18 @@ pipeline{
         }
         stage("Build docker image ") {
             steps{
-                sh "docker build -t mohamedgamal5466/java:v${imageTag} . "
-            }
+                script {
+                    def r9 = new edu.iti.dockerClass()
+                    r9.build("mohamedgamal5466/java","v${BUILD_NUMBER}")  
+                }
+            } 
         }
         stage("Docker Login ") {
             steps{
-                sh "docker login  -u ${dockerUsername} -p ${dockerpassword} "
+                              script {
+                    def r9 = new edu.iti.dockerClass()
+                    r9.login("${dockerUsername}","${dockerpassword}")  
+                }
             }
         }      
         // stage("Push docker image ") {
