@@ -30,7 +30,7 @@ pipeline{
         }
         stage("Build docker image ") {
             steps{
-                sh "docker build -t mohamedgamal5466/java:v${BUILD_NUMBER} . "
+                sh "docker build -t mohamedgamal5466/java:v${imageTag} . "
             }
         }
         stage("Docker Login ") {
@@ -40,7 +40,7 @@ pipeline{
         }      
         // stage("Push docker image ") {
         //    steps{
-        //        sh "docker push mohamedgamal5466/java:v${BUILD_NUMBER} "
+        //        sh "docker push mohamedgamal5466/java:v${imageTag} "
         //    }
         //}          
     } 
