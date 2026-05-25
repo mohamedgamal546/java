@@ -13,32 +13,32 @@ pipeline{
        dockerpassword = credentials("dockerpassword")
     }
     stages{
-        stages("Build java   app") {
+        stage("Build java app") {
             steps{
                 sh "mvn package install -DskipTests"
             }
         }
-        stages("Test java app") {
+        stage("Test java app") {
             steps{
                 sh "mvn test"
             }
         }
-        stages("Archive java app") {
+        stage("Archive java app") {
             steps{
                 archiveArtifacts artifacts: '**/*.jar', followSymlinks: false
             }
         }
-        stages("Build docker image ") {
+        stage("Build docker image ") {
             steps{
                 sh "docker build -t java-app:v1 . "
             }
         }
-        stages("Docker Login ") {
+        stage("Docker Login ") {
             steps{
                 sh "docker login  -u ${dockerUsername} -p ${dockerpassword} "
             }
         }      
-        // stages("Push docker image ") {
+        // stage("Push docker image ") {
         //    steps{
         //        sh "docker push java-app:v1 "
         //    }
