@@ -8,22 +8,17 @@ pipeline {
         maven 'maven-354'
     }
 
-    environment {
-        dockerUsername = credentials("dockerUsername")
-        dockerpassword = credentials("dockerpassword")
-    }
-
     stages {
 
         stage('Build java app') {
             steps {
-                sh "mvn clean package -DskipTests"
+                sh 'mvn clean package -DskipTests'
             }
         }
 
         stage('Test java app') {
             steps {
-                sh "mvn test"
+                sh 'mvn test'
             }
         }
 
@@ -35,19 +30,25 @@ pipeline {
 
         stage('Build docker image') {
             steps {
-                sh "docker build -t java-app:v1 ."
+                sh 'docker build -t java-app:v1 .'
             }
         }
 
         stage('Docker Login') {
             steps {
-                sh "echo ${dockerpassword} | docker login -u ${dockerUsername} --password-stdin"
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-cred',
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS'
+                )]) {
+                    sh 'echo $PASS | docker login -u $USER --password-stdin'
+                }
             }
         }
 
         // stage('Push docker image') {
         //     steps {
-        //         sh "docker push java-app:v1"
+        //         sh 'docker push java-app:v1'
         //     }
         // }
     }
