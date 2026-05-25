@@ -1,10 +1,5 @@
 @Library('sys-lib@main') _
 
-pipeline{
-    agent {
-       label 'jenkins-agent-01'
-    }
-
 
 
 pipeline{
