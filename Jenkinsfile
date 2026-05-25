@@ -21,7 +21,7 @@ pipeline{
             steps{
                 script {
                     def r7 = new edu.iti.mavenClass()
-                    r7.Build("package install -DskipTests")
+                    r7.build("package install -DskipTests")
                 }
             }
         }
